@@ -1,6 +1,6 @@
 import os
-from pathlib import Path
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 
 import torch
 from diffusers import ControlNetModel, DDIMScheduler
@@ -12,19 +12,27 @@ from diffqrcoder import DiffQRCoderPipeline
 def parse_arguments() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument(
+        "--height",
+        type=int,
+        default=768,
+    )
+    parser.add_argument(
+        "--width",
+        type=int,
+        default=768,
+    )
+    parser.add_argument(
         "--controlnet_ckpt",
         type=str,
-        default="checkpoints/control_v1p_sd15_qrcode_monster"
+        default="checkpoints/control_v1p_sd15_qrcode_monster",
     )
     parser.add_argument(
         "--pipe_ckpt",
         type=str,
-        default="https://huggingface.co/fp16-guy/Cetus-Mix_Whalefall_fp16_cleaned/blob/main/cetusMix_Whalefall2_fp16.safetensors"
+        default="https://huggingface.co/fp16-guy/Cetus-Mix_Whalefall_fp16_cleaned/blob/main/cetusMix_Whalefall2_fp16.safetensors",
     )
     parser.add_argument(
-        "--qrcode_path",
-        type=str,
-        default="qrcodes/thanks_reviewer.png"
+        "--qrcode_path", type=str, default="qrcodes/thanks_reviewer.png"
     )
     parser.add_argument(
         "--qrcode_module_size",
@@ -46,11 +54,7 @@ def parse_arguments() -> Namespace:
         type=str,
         default="Winter wonderland, fresh snowfall, evergreen trees, cozy log cabin, smoke rising from chimney, aurora borealis in night sky.",
     )
-    parser.add_argument(
-        "--neg_prompt",
-        type=str,
-        default="easynegative"
-    )
+    parser.add_argument("--neg_prompt", type=str, default="easynegative")
     parser.add_argument(
         "--controlnet_conditioning_scale",
         type=float,
@@ -78,11 +82,7 @@ def parse_arguments() -> Namespace:
         type=float,
         default=0.1,
     )
-    parser.add_argument(
-        "--device",
-        type=str,
-        default="cuda"
-    )
+    parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument(
         "--output_path",
         type=str,
@@ -112,6 +112,8 @@ if __name__ == "__main__":
     result = pipe(
         prompt=args.prompt,
         qrcode=qrcode,
+        height=args.height,
+        width=args.width,
         qrcode_module_size=args.qrcode_module_size,
         qrcode_padding=args.qrcode_padding,
         negative_prompt=args.neg_prompt,
